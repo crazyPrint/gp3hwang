@@ -1,0 +1,5 @@
+datasource:
+  url: jdbc:mysql://localhost:3306/qfbap_dm
+  driver-class-name: com.mysql.jdbc.Driver
+  username: root
+  password: 123456
