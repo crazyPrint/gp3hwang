@@ -63,23 +63,22 @@ object MediaRpt {
     })
 
 
-
-    resultRdd.foreachPartition(item =>{
+    resultRdd.foreachPartition(item => {
       //获取连接
-      val conn: Connection=JDBCConnectePoolsTest.getConn()
+      val conn: Connection = JDBCConnectePoolsTest.getConn()
 
-      item.foreach(one=>{
+      item.foreach(one => {
         val pstm: PreparedStatement = conn.prepareStatement("insert into  mediarpt values(?,?,?,?,?,?,?,?,?,?)")
-        pstm.setString(1,one._1)
-        pstm.setDouble(2,one._2(0))
-        pstm.setDouble(3,one._2(1))
-        pstm.setDouble(4,one._2(2))
-        pstm.setDouble(5,one._2(3))
-        pstm.setDouble(6,one._2(4))
-        pstm.setDouble(7,one._2(5))
-        pstm.setDouble(8,one._2(6))
-        pstm.setDouble(9,one._2(7))
-        pstm.setDouble(10,one._2(8))
+        pstm.setString(1, one._1)
+        pstm.setDouble(2, one._2(0))
+        pstm.setDouble(3, one._2(1))
+        pstm.setDouble(4, one._2(2))
+        pstm.setDouble(5, one._2(3))
+        pstm.setDouble(6, one._2(4))
+        pstm.setDouble(7, one._2(5))
+        pstm.setDouble(8, one._2(6))
+        pstm.setDouble(9, one._2(7))
+        pstm.setDouble(10, one._2(8))
         pstm.executeUpdate()
       })
 

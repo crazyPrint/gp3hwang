@@ -6,8 +6,7 @@ import java.sql.{Connection, DriverManager}
 object JDBCConnectePoolsTest {
   private val max = 10 //设置连接最大数
   private val ConnectionNum = 10 //设置 每次可以获取几个Connection
-  private var conNum = 0
-  //连接数
+  private var conNum = 0 //当前连接数
   private val pool = new util.LinkedList[Connection]() //连接池
 
   //加载Driver
