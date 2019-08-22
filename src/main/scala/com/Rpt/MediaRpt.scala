@@ -50,7 +50,7 @@ object MediaRpt {
       val appname = row.getAs[String]("appname")
 
       var keyy = ""
-      if (!"appname".equals("")) {
+      if (!appname.equals("")) {
         keyy = appname
       } else {
         keyy = brodic.value.getOrElse(appid, "其他")
