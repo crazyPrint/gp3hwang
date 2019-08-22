@@ -126,23 +126,10 @@ object textToParquet {
     // 构建DF
     val df = spark.createDataFrame(rowRDD, SchemaUtils.structtype)
     // 保存基础数据
-    //    df.write.mode(SaveMode.Append).partitionBy("provincename","cityname").parquet("D:/MrOutput/Spark/basedata")
-    df.createOrReplaceTempView("log")
-    val result1: DataFrame = spark.sql("select count(1) ct,provincename,cityname from log group by provincename,cityname order by ct desc")
-    // 保存result1为json数据
-    //    result1.write.json("D:/MrOutput/Spark/result1json")
-    // 保存result1为mysql数据
-    //    result1.write.mode(SaveMode.Overwrite).format("jdbc")
-    //      .option("user", "root")
-    //      .option("password", "123456")
-    //      .option("dbtable", "sparkpro1LOG")
-    //      .option("url", "jdbc:mysql://localhost:3306/exam")
-    //      .save()
-
-    spark.sql("select sessionid,\ncase when REQUESTMODE=1 and PROCESSNODE>=1 then 1 else 0 end OriginalRequest,\ncase when REQUESTMODE=1 and PROCESSNODE>=2 then 1 else 0 end ValidRequest,\ncase when REQUESTMODE=1 and PROCESSNODE=3 then 1 else 0 end SuccessRequest,\n\ncase when ISEFFECTIVE=1 and ISBILLING=1 and ISBID=1 then 1 else 0 end ParticipateBid,\ncase when ISEFFECTIVE=1 and ISBILLING=1 and ISWIN=1 then 1 else 0 end SuccessBid,\n\ncase when REQUESTMODE=2 and ISEFFECTIVE=1 then 1 else 0 end Show,\ncase when REQUESTMODE=3 and ISEFFECTIVE=1 then 1 else 0 end Click,\n\ncase when ISEFFECTIVE=1 and ISBILLING=1 and ISWIN=1 then 1 else 0 end adflag\n\nfrom log").show()
+    df.write.mode(SaveMode.Overwrite).partitionBy("provincename", "cityname").parquet("D:/MrOutput/Spark/basedata")
 
 
     sc.stop()
-
+    spark.stop()
   }
 }
