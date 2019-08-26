@@ -17,7 +17,7 @@ object DeviceRpt {
 
     // 获取数据
     val df: DataFrame = spark.read.parquet("D:/MrOutput/Spark/basedata")
-    //将数据进行处理，统计各个指标
+    //将数据进行处理，统计各个指标  运营商类型
     val DeviceIsp: RDD[(String, List[Double])] = df.rdd.map(row => {
       // 把需要的字段全部取到
       val requestmode: Int = row.getAs[Int]("requestmode")

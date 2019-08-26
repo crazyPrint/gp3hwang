@@ -63,7 +63,7 @@ object MediaRpt {
     })
 
 
-    resultRdd.foreachPartition(item => {
+    resultRdd.foreachPartition(item=> {
       //获取连接
       val conn: Connection = JDBCConnectePoolsTest.getConn()
 
