@@ -1,11 +1,14 @@
 package com.Tags
 
-import com.Utils.TagUtils
+import com.Utils.{HbaseConnection, TagUtils}
+import org.apache.hadoop.hbase.client.Put
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable
+import org.apache.hadoop.hbase.util.Bytes
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
-object TagsContextRedis extends Serializable{
+object TagsContextRedisHbase extends Serializable{
   def main(args: Array[String]): Unit = {
 
     //创建上下文
@@ -39,8 +42,9 @@ object TagsContextRedis extends Serializable{
       val keywordsList = TagsKeywords.makeTags(row,bcstopword)
       //地域标签
       val locationList = TagsLocation.makeTags(row)
-
-      (userId, adList:::appList:::adplatList:::deviceList:::keywordsList:::locationList)
+      //商圈标签
+      val business = BusinessTag.makeTags(row)
+      (userId, adList:::appList:::adplatList:::deviceList:::keywordsList:::locationList:::business)
     })
 
     titleData.reduceByKey((list1,list2)=>{
@@ -49,8 +53,19 @@ object TagsContextRedis extends Serializable{
         .groupBy(_._1)
         .mapValues(_.size)
         .toList
-    }).foreach(println)
-//    titleData.foreach(println)
+    })//.foreach(println)
+      .map{
+      case(userid,userTag)=>{
+
+        val put = new Put(Bytes.toBytes(userid))
+        // 处理下标签
+        val tags = userTag.map(t=>t._1+","+t._2).mkString(",")
+        put.addImmutable(Bytes.toBytes("tags"),Bytes.toBytes("20190826"),Bytes.toBytes(tags))
+        (new ImmutableBytesWritable(),put)
+      }
+    }
+      // 保存到对应表中
+      .saveAsHadoopDataset(HbaseConnection.creatTableToHbase(sc))
 
     sc.stop()
     spark.stop()

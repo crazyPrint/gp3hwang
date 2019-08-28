@@ -1,4 +1,5 @@
 package com.Utils
+import com.Tags.BusinessTag
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -25,9 +26,9 @@ object test {
     df.rdd.map(row=>{
       val v1=row.getAs[String]("long")
       val v2=row.getAs[String]("lat")
-//      val business=BusinessTag.makeTags(row)
-//      business
-      (v1,v2)
+      val business=BusinessTag.makeTags(row)
+      business
+//      (v1,v2)
     }).foreach(println)
   }
 }

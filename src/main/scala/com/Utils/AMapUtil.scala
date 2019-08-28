@@ -10,8 +10,8 @@ object AMapUtil {
   def getBusinessFromAmap(long:Double,lat:Double):String={
     //https://restapi.amap.com/v3/geocode
     // /regeo?output=xml&location=116.310003,39.991957&key=<用户的key>&radius=1000&extensions=all
-    val location = long+","+lat
-    val urlStr = "https://restapi.amap.com/v3/geocode/regeo?location="+location+"&key=2d24d3f8f2e10bca938db3886f690fc3"
+    val location = long +","+lat
+    val urlStr = "https://restapi.amap.com/v3/geocode/regeo?location="+location+"&key=eb0dd1fa84589ca07c734e4e10acbd82"
     // 调用请求
     val jsonstr = HttpUtil.get(urlStr)
     // 解析json串
@@ -20,7 +20,7 @@ object AMapUtil {
     val status = jsonparse.getIntValue("status")
     if(status == 0) return ""
     // 接下来解析内部json串，判断每个key的value都不能为空
-    val regeocodeJson = jsonparse.getJSONObject("regeoc泉河,中关村,西苑ode")
+    val regeocodeJson = jsonparse.getJSONObject("regeocode")
     if(regeocodeJson == null || regeocodeJson.keySet().isEmpty) return ""
 
     val addressComponentJson = regeocodeJson.getJSONObject("addressComponent")
